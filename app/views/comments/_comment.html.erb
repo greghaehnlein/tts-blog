@@ -1,6 +1,12 @@
 <% @blog_post.comment.each do |comment| %>
 	
-	<h4><%= comment.author %></h4>
-	<h4><% time_ago_in_words(comment.create_at) %> age</h4>
+	<h4><%= link_to comment.user.username, user_posts_path(name: comment.user.username) %></h4>
+	<h4><%= time_ago_in_words(comment.created_at) %> ago</h4>
 	<p><%= comment.comment_entry %></p>
+	<% if current_user.id == comment.user.id%>
+	<%= link_to "Edit", edit_comment_path(comment), class: "btn btn-warning" %>
+	<%= link_to "Destroy", comment, method: :delete, data: {confirm: "Are you Sure?"}, class: "btn btn-dnager"%>
+	<% end %>
+
+
 <% end %>

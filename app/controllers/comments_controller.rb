@@ -3,6 +3,8 @@ class CommentsController < ApplicationController
 	before_action :set_comment, only: [:edit, :update, :destroy]
 	
   def edit
+    @blog_post = BlogPost.find(@comment.blog_post_id)
+    no_access-visitors(current_user, @comment)
   end
 
   def create
@@ -30,6 +32,7 @@ end
 end
 
 	def destroy
+    @comment.destroy
 		respond_to do |format|
 			format.html { redirect_to blog_post_url(id: @comment.blog_post_id), notice: "Your comment was destroyed!!!!"}
 
@@ -40,7 +43,7 @@ end
 private
 
 	def comment_params
-	params.require(:comment).permit(:author, :comment_entry, :blog_post_id)	
+	params.require(:comment).permit(:user_id, :comment_entry, :blog_post_id)	
 end
 	def set_comment
 		@comment = Comment.find(params[:id])
